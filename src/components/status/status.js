@@ -1,21 +1,17 @@
 export class Status {
 
-  constructor (vm, status) {
+  constructor (vm, status, cb) {
     this.status = status
     this.action = false
-    this.triggerCallback = []
+    this.triggerCallback = cb
     Object.defineProperty(vm, `$${status}`, {
       get: () => {
         if (this.action) return false
         this.action = true
-        for (let cb of this.triggerCallback) cb()
+        this.triggerCallback()
         this.action = false
         return true
       }
     })
-  }
-
-  addToCallBack (cb) {
-    this.triggerCallback.push(cb)
   }
 }

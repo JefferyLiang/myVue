@@ -16,6 +16,8 @@ export class myComponent {
     _initData(this)
     _initComputed(this)
     _initStatus(this)
+
+    delete this.dep
   }
 
 }

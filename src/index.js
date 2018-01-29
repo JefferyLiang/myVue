@@ -12,7 +12,6 @@ let vm = new myComponent({
   },
   updated () {
     this.lastName = 'fahang'
-    console.log(this.fullName)
   }
 })
 
