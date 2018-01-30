@@ -18,18 +18,17 @@ function getterAndSetter (vm, key) {
       return vm.$options.data[key]
     },
     set: (val) => {
-      if (vm.$hook.update) {
-        vm.$options.data[key] = val
-        deps.forEach(func => func())
-        return
-      } else {
+      if (!vm.$hook.update) {
         vm.$hook.update = true
         callHook(vm, 'beforeUpdate')
-        vm.$options.data[key] = val
-        deps.forEach(func => func())
-        callHook(vm, 'updated')
-        vm.$hook.update = false
+        // 异步化,等待beforeUpdate的事件完成，再触发updated钩子
+        setTimeout(function () {
+          callHook(vm, 'updated')
+          vm.$hook.update = false
+        }, 0)
       }
+      vm.$options.data[key] = val
+      deps.forEach(func => func())
     }
   })
 }

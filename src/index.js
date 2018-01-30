@@ -11,15 +11,16 @@ let vm = new myComponent({
     }
   },
   beforeCreate () {
-    console.log('before create')
+    console.log('构建前: data域数据尚未注入')
   },
   created () {
-    console.log('created')
+    console.log('构建完成: data域数据注入完成')
+    this.firstName = 'FaHang'
+    this.lastName = 'Lin'
+    console.log(this.fullName)
   },
   beforeUpdate () {
-    console.log('数据发生变化前')
-    console.log(`原始数据： ${this.firstName}`)
-    console.log('开始变化')
+    console.log(`数据发生变化前: ${this.fullName}`)
   },
   updated () {
     console.log(`更新后数据： ${this.fullName}`)
@@ -27,12 +28,9 @@ let vm = new myComponent({
   methods: {
     setFirstName (str) {
       this.firstName = str
-      this.setLastName('fahang')
     },
     setLastName (str) {
       this.lastName = str
     }
   }
 })
-
-vm.setFirstName('Lin')

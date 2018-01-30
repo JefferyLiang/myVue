@@ -7,11 +7,12 @@ import { _initMethods } from './method'
 export class myComponent {
 
   constructor (options) {
+    if (!(options instanceof Object)) throw('options is not Object')
     this.$options = {}
     this.$hook = {}
     this.dep = null
-    if (options && options.data && options.data instanceof Object) this.$options.data = options.data
-    if (options && options.computed && options.computed instanceof Object) this.$options.computed = options.computed
+    if (options.data && options.data instanceof Object) this.$options.data = options.data
+    if (options.computed && options.computed instanceof Object) this.$options.computed = options.computed
     
     _initHook(this, options)
     callHook(this, 'beforeCreate')
