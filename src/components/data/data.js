@@ -1,3 +1,5 @@
+import { callHook } from '../hook'
+
 export const _initData = (vm) => {
   if (vm.$options.data && vm.$options.data instanceof Object) {
     for (let key in vm.$options.data) {
@@ -16,9 +18,18 @@ function getterAndSetter (vm, key) {
       return vm.$options.data[key]
     },
     set: (val) => {
-      vm.$options.data[key] = val
-      deps.forEach(func => func())
-      vm.$updated
+      if (vm.$hook.update) {
+        vm.$options.data[key] = val
+        deps.forEach(func => func())
+        return
+      } else {
+        vm.$hook.update = true
+        callHook(vm, 'beforeUpdate')
+        vm.$options.data[key] = val
+        deps.forEach(func => func())
+        callHook(vm, 'updated')
+        vm.$hook.update = false
+      }
     }
   })
 }

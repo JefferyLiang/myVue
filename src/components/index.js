@@ -1,6 +1,8 @@
 import { _initData } from './data/data'
 import { _initComputed } from './data/computed'
-import { _initStatus } from './status/index'
+// import { _initStatus } from './status/index'
+import { callHook, _initHook } from './hook'
+import { _initMethods } from './method'
 
 export class myComponent {
 
@@ -10,14 +12,13 @@ export class myComponent {
     this.dep = null
     if (options && options.data && options.data instanceof Object) this.$options.data = options.data
     if (options && options.computed && options.computed instanceof Object) this.$options.computed = options.computed
-    if (options && options.beforeUpdate && options.beforeUpdate instanceof Function) this.$options.beforeUpdate = options.beforeUpdate
-    if (options && options.updated && options.updated instanceof Function) this.$options.updated = options.updated
-
+    
+    _initHook(this, options)
+    callHook(this, 'beforeCreate')
     _initData(this)
     _initComputed(this)
-    _initStatus(this)
-
-    delete this.dep
+    _initMethods(this, options)
+    callHook(this, 'created')
   }
 
 }
